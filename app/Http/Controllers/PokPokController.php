@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\PokPok;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -27,9 +28,15 @@ class PokPokController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
-        //
+        $validated = $request->validate([
+            'message' => 'required|string|max:255',
+        ]);
+
+        $request->user()->pokpoks()->create($validated);
+
+        return redirect(route('pokpoks.index'));
     }
 
     /**
